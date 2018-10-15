@@ -7,16 +7,14 @@
     <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
-    <div class="container">
       <div class="gameboard">
-        <div id="circle" on:click="game"></div>
-        <div class="cone-red"></div>
-        <div class="cone-blue rotate-90"></div>
-        <div class="cone-yellow rotate-180"></div>
-        <div class="cone-green rotate-270"></div>
-      </div>
       <div id='app'>
         <div v-cloak>
+          <button id="circle" v-on:click="game"></button>
+          <button class="cone-red"></button>
+          <button class="cone-blue rotate-90"></button>
+          <button class="cone-yellow rotate-180"></button>
+          <button class="cone-green rotate-270"></button>
         </div>
       </div>
     </div>
