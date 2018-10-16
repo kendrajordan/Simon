@@ -1,0 +1,24 @@
+/* .button() {
+  &:active {
+
+  }
+}
+
+#primary {
+  button()
+}
+
+#success {
+  button()
+}
+
+#danger {
+  button()
+}
+
+#warning {
+  button()
+} */
+button:active {
+
+}

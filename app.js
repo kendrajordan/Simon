@@ -63,8 +63,9 @@ var app = new Vue({
         },
 
         playerTurn: function () {
-
-          let self = this;
+          this.playerSequence.push(this.tap(color));
+          console.console.log(this.playerSequence);
+        /*  let self = this;
             setTimeout(function() {
             console.log("your turn");
             console.log(self.sequence.length);
@@ -79,7 +80,7 @@ var app = new Vue({
               }
             }
             }, 3000);
-            }
+          }*/
 
 
         }
