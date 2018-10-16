@@ -63,21 +63,25 @@ var app = new Vue({
         },
 
         playerTurn: function () {
-          for (var i=0;i<this.sequence.length;i++){
-            this.playerSequence.push(this.tap(this.color));
 
-            if (this.playerSequence[i]==this.sequence[i]) {
-              console.log('Keep going!');
+          let self = this;
+            setTimeout(function() {
+            console.log("your turn");
+            console.log(self.sequence.length);
+            console.log(self.tap(color));
+            for (let i =0; i < self.sequence.length; i++){
 
-            } else {
-              console.log('Game Over');
+              if (self.tap(color) == self.sequence[i] ){
+                console.log("you're winning!");
+              }
+              else {
+                console.log('Game Over');
+              }
             }
-          }
+            }, 3000);
+            }
+
 
         }
-
-
-
-    }
 
 });
