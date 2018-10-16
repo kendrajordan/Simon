@@ -1,38 +1,88 @@
+Vue.component('timer', {
 
+    template: `<div id="status">
+                    <span v-html="message"></span>{{ remaining }}
+                </div>`,
 
+    data() {
+        return {
+            message: 'Click the <strong>Start Game</strong> button to begin!',
+            remaining: '',
+            intervalId: null,
+            maxSecondsToWait: 10
+        }
+    },
 
+    created() {
 
+        let self = this;
+
+        self.$parent.$on('stateChange', function(event) {
+console.log('Hello');
+            switch (event) {
+
+                case 'capturing':
+                    self.startTimer();
+                    break;
+
+                case 'playing':
+                    self.stopTimer('Watch closely!');
+                    break;
+
+                default:
+                    console.log("Timer: state changed to [" + event + "]");
+
+            }
+
+        });
+
+    },
+
+    methods: {
+
+        startTimer: function () {
+            if (this.intervalId === null) {
+                this.remaining = this.maxSecondsToWait;
+                this.message = '';
+                this.intervalId = setInterval(this.tick, 1000);
+            }
+        },
+
+        stopTimer: function (text) {
+            clearInterval(this.intervalId);
+            this.message = text;
+            this.remaining = '';
+            this.intervalId = null;
+        },
+
+        tick: function () {
+            console.log("Tick!");
+            this.remaining--;
+            if (this.remaining === 0) {
+                this.stopTimer('Time expired! Click <strong>Start Game</strong> to begin a new game!');
+                // this.$emit('expired');
+            }
+        }
+
+    }
+
+});
 
 var app = new Vue({
 
     el: "#app",
 
     data: {
-        message: 'Click the "Start Game" button to begin.',
         currentButton: '',
-        sequence: [],
-        playerSequence: [],
-        playingId: 0,
-        colors: ['red', 'yellow', 'green', 'blue'],
-        randomColor: ''
-
-
+        sequence: ['blue', 'red', 'red', 'yellow', 'green', 'yellow'],
+        playingId: 0
     },
 
     methods: {
 
-      computerTurn: function () {
-        randomColor = this.colors[Math.floor(Math.random()*this.colors.length)];
-        console.log(randomColor);
-        this.sequence.push(randomColor);
-        this.playSequence();
-
-
-      },
-
         tap: function (color) {
 
-            var self = this;
+            let self = this;
 
             self.currentButton = color;
             setTimeout(function() {
@@ -42,10 +92,10 @@ var app = new Vue({
 
         playSequence: function () {
 
-            var self = this;
-            self.message = "Pay attention...here we go!";
+            let self = this;
+            self.$emit('stateChange', 'playing');
 
-            var intervalId = setInterval(function () {
+            let intervalId = setInterval(function () {
 
                 if (self.playingId < self.sequence.length) {
                     self.tap(self.sequence[self.playingId]);
@@ -54,35 +104,13 @@ var app = new Vue({
                 else {
                     clearInterval(intervalId);
                     self.playingId = 0;
-                    self.message = "Your turn!";
+                    self.$emit('stateChange', 'capturing');
                 }
 
             }, 600);
-          this.playerTurn();
-
-        },
-
-        playerTurn: function () {
-          this.playerSequence.push(this.tap(color));
-          console.console.log(this.playerSequence);
-        /*  let self = this;
-            setTimeout(function() {
-            console.log("your turn");
-            console.log(self.sequence.length);
-            console.log(self.tap(color));
-            for (let i =0; i < self.sequence.length; i++){
-
-              if (self.tap(color) == self.sequence[i] ){
-                console.log("you're winning!");
-              }
-              else {
-                console.log('Game Over');
-              }
-            }
-            }, 3000);
-          }*/
-
 
         }
+
+    }
 
 });
